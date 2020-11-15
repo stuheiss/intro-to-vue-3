@@ -1,6 +1,8 @@
 <template>
       <div class="nav-bar"></div>
 
+      <div class="cart">Cart({{ cart }})</div>
+
       <div class="product-display">
         <div class="product-container">
           <div class="product-image">
@@ -15,10 +17,12 @@
             <ul>
               <li v-for="detail in details" :key="detail.id">{{ detail }}</li>
             </ul>
-            <div v-for="variant in variants" :key="variant.id">{{ variant.color }}</div>
+            <div v-for="variant in variants" :key="variant.id" @mouseover="updateImage(variant.image)">{{ variant.color }}</div>
             <ul>
               <li v-for="size in sizes" :key="size.id">{{ size }}</li>
             </ul>
+            <button class="button" @click="addToCart">Add to Cart</button>
+            <button class="button" @click="removeFromCart">Remove from Cart</button>
           </div>
         </div>
       </div>
@@ -31,17 +35,29 @@ export default {
   },
   data() {
     return {
+      cart: 0,
       product: 'Socks',
       image: './assets/images/socks_green.jpg',
       inventory: 100,
       onSale: true,
       details: ['50% cotton', '30% wool', '20% polyester'],
       variants: [
-        { id:2234, color:'green' },
-        { id:2235, color:'blue' },
+        { id:2234, color:'green', image:'./assets/images/socks_green.jpg' },
+        { id:2235, color:'blue',  image:'./assets/images/socks_blue.jpg'  },
       ],
       sizes: ['small', 'medium', 'large'],
     };
-  }
+  },
+  methods: {
+    addToCart() {
+      this.cart += 1;
+    },
+    removeFromCart() {
+      this.cart -= 1;
+    },
+    updateImage(variantImage) {
+      this.image = variantImage;
+    }
+  },
 }
 </script>

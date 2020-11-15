@@ -5,7 +5,10 @@
 
       <div class="product-display">
         <div class="product-container">
-          <div class="product-image">
+          <div
+            class="product-image"
+            :class="{ 'out-of-stock-img': !inStock }"
+          >
             <img :src="image">
           </div>
           <div class="product-info">
@@ -17,12 +20,28 @@
             <ul>
               <li v-for="detail in details" :key="detail.id">{{ detail }}</li>
             </ul>
-            <div v-for="variant in variants" :key="variant.id" @mouseover="updateImage(variant.image)">{{ variant.color }}</div>
+            <div
+              v-for="variant in variants" :key="variant.id"
+              @mouseover="updateImage(variant.image)"
+              class="color-circle"
+              :style="{ backgroundColor:variant.color }"
+            >
+            </div>
             <ul>
               <li v-for="size in sizes" :key="size.id">{{ size }}</li>
             </ul>
-            <button class="button" @click="addToCart">Add to Cart</button>
-            <button class="button" @click="removeFromCart">Remove from Cart</button>
+            <button
+              :disabled="!inStock"
+              class="button"
+              :class="{ disabledButton: !inStock }"
+              @click="addToCart"
+            >Add to Cart</button>
+            <button
+              :disabled="cart <= 0"
+              class="button"
+              :class="{ disabledButton: cart <= 0 }"
+              @click="removeFromCart"
+            >Remove from Cart</button>
           </div>
         </div>
       </div>
@@ -32,6 +51,11 @@
 export default {
   name: 'App',
   components: {
+  },
+  computed: {
+    inStock() {
+      return this.inventory > 0;
+    }
   },
   data() {
     return {

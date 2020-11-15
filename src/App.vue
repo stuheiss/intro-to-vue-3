@@ -13,16 +13,16 @@
           </div>
           <div class="product-info">
             <h1>{{ product }}</h1>
-            <p v-if="inventory > 10">In Stock</p>
-            <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
+            <p v-if="quantity > 10">In Stock</p>
+            <p v-else-if="quantity <= 10 && quantity > 0">Almost sold out!</p>
             <p v-else>Out of Stock</p>
             <p v-if="onSale">On Sale</p>
             <ul>
               <li v-for="detail in details" :key="detail.id">{{ detail }}</li>
             </ul>
             <div
-              v-for="variant in variants" :key="variant.id"
-              @mouseover="updateImage(variant.image)"
+              v-for="(variant, index) in variants" :key="variant.id"
+              @mouseover="updateVariant(index)"
               class="color-circle"
               :style="{ backgroundColor:variant.color }"
             >
@@ -54,20 +54,27 @@ export default {
   },
   computed: {
     inStock() {
-      return this.inventory > 0;
-    }
+      return this.quantity > 0;
+    },
+    image() {
+      return this.variants[this.selectedVariant].image;
+    },
+    quantity() {
+      return this.variants[this.selectedVariant].quantity;
+    },
+    onSale() {
+      return this.variants[this.selectedVariant].onSale;
+    },
   },
   data() {
     return {
       cart: 0,
       product: 'Socks',
-      image: './assets/images/socks_green.jpg',
-      inventory: 100,
-      onSale: true,
+      selectedVariant: 0,
       details: ['50% cotton', '30% wool', '20% polyester'],
       variants: [
-        { id:2234, color:'green', image:'./assets/images/socks_green.jpg' },
-        { id:2235, color:'blue',  image:'./assets/images/socks_blue.jpg'  },
+        { id:2234, color:'green', image:'./assets/images/socks_green.jpg', quantity:50, onSale:true },
+        { id:2235, color:'blue', image:'./assets/images/socks_blue.jpg', quantity:0, onSale:false },
       ],
       sizes: ['small', 'medium', 'large'],
     };
@@ -79,9 +86,9 @@ export default {
     removeFromCart() {
       this.cart -= 1;
     },
-    updateImage(variantImage) {
-      this.image = variantImage;
-    }
+    updateVariant(index) {
+      this.selectedVariant = index;
+    },
   },
 }
 </script>

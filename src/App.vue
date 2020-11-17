@@ -2,93 +2,23 @@
       <div class="nav-bar"></div>
 
       <div class="cart">Cart({{ cart }})</div>
-
-      <div class="product-display">
-        <div class="product-container">
-          <div
-            class="product-image"
-            :class="{ 'out-of-stock-img': !inStock }"
-          >
-            <img :src="image">
-          </div>
-          <div class="product-info">
-            <h1>{{ product }}</h1>
-            <p v-if="quantity > 10">In Stock</p>
-            <p v-else-if="quantity <= 10 && quantity > 0">Almost sold out!</p>
-            <p v-else>Out of Stock</p>
-            <p v-if="onSale">On Sale</p>
-            <ul>
-              <li v-for="detail in details" :key="detail.id">{{ detail }}</li>
-            </ul>
-            <div
-              v-for="(variant, index) in variants" :key="variant.id"
-              @mouseover="updateVariant(index)"
-              class="color-circle"
-              :style="{ backgroundColor:variant.color }"
-            >
-            </div>
-            <ul>
-              <li v-for="size in sizes" :key="size.id">{{ size }}</li>
-            </ul>
-            <button
-              :disabled="!inStock"
-              class="button"
-              :class="{ disabledButton: !inStock }"
-              @click="addToCart"
-            >Add to Cart</button>
-            <button
-              :disabled="cart <= 0"
-              class="button"
-              :class="{ disabledButton: cart <= 0 }"
-              @click="removeFromCart"
-            >Remove from Cart</button>
-          </div>
-        </div>
-      </div>
+      <ProductDisplay :premium="premium" />
 </template>
 <script>
+import ProductDisplay from './components/ProductDisplay'
 
 export default {
   name: 'App',
   components: {
-  },
-  computed: {
-    inStock() {
-      return this.quantity > 0;
-    },
-    image() {
-      return this.variants[this.selectedVariant].image;
-    },
-    quantity() {
-      return this.variants[this.selectedVariant].quantity;
-    },
-    onSale() {
-      return this.variants[this.selectedVariant].onSale;
-    },
+    ProductDisplay
   },
   data() {
     return {
       cart: 0,
-      product: 'Socks',
-      selectedVariant: 0,
-      details: ['50% cotton', '30% wool', '20% polyester'],
-      variants: [
-        { id:2234, color:'green', image:'./assets/images/socks_green.jpg', quantity:50, onSale:true },
-        { id:2235, color:'blue', image:'./assets/images/socks_blue.jpg', quantity:0, onSale:false },
-      ],
-      sizes: ['small', 'medium', 'large'],
+      premium: true,
     };
   },
   methods: {
-    addToCart() {
-      this.cart += 1;
-    },
-    removeFromCart() {
-      this.cart -= 1;
-    },
-    updateVariant(index) {
-      this.selectedVariant = index;
-    },
   },
 }
 </script>

@@ -34,9 +34,7 @@
           @click="addToCart"
         >Add to Cart</button>
         <button
-          :disabled="cart <= 0"
           class="button"
-          :class="{ disabledButton: cart <= 0 }"
           @click="removeFromCart"
         >Remove from Cart</button>
       </div>
@@ -67,6 +65,12 @@ export default {
     inStock() {
       return this.quantity > 0;
     },
+    variant() {
+      return this.variants[this.selectedVariant];
+    },
+    id() {
+      return this.variants[this.selectedVariant].id;
+    },
     image() {
       return this.variants[this.selectedVariant].image;
     },
@@ -84,17 +88,17 @@ export default {
       details: ['50% cotton', '30% wool', '20% polyester'],
       variants: [
         { id:2234, color:'green', image:'./assets/images/socks_green.jpg', quantity:50, onSale:true },
-        { id:2235, color:'blue', image:'./assets/images/socks_blue.jpg', quantity:0, onSale:false },
+        { id:2235, color:'blue', image:'./assets/images/socks_blue.jpg', quantity:10, onSale:false },
       ],
       sizes: ['small', 'medium', 'large'],
     };
   },
   methods: {
     addToCart() {
-      this.cart += 1;
+      this.$emit('add-to-cart', this.variant.id);
     },
     removeFromCart() {
-      this.cart -= 1;
+      this.$emit('remove-from-cart', this.variant.id);
     },
     updateVariant(index) {
       this.selectedVariant = index;

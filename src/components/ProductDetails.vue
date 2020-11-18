@@ -1,6 +1,6 @@
 <template>
   <ul>
-    <li v-for="detail in details" :key="detail.id">{{ detail }}</li>
+    <li v-for="(detail, index) in details" :key="index">{{ detail }}</li>
   </ul>
 </template>
 

@@ -25,7 +25,7 @@
         >
         </div>
         <ul>
-          <li v-for="size in sizes" :key="size.id">{{ size }}</li>
+          <li v-for="(size, index) in sizes" :key="index">{{ size }}</li>
         </ul>
         <button
           :disabled="!inStock"
@@ -38,17 +38,23 @@
           @click="removeFromCart"
         >Remove from Cart</button>
       </div>
+      <ReviewList v-if="reviews.length" :reviews="reviews"></ReviewList>
+      <ReviewForm @review-submitted="addReview"></ReviewForm>
     </div>
   </div>
 </template>
 
 <script>
 import ProductDetails from './ProductDetails'
+import ReviewForm from './ReviewForm'
+import ReviewList from './ReviewList'
 
 export default {
   name: 'ProductDisplay',
   components: {
-    ProductDetails
+    ProductDetails,
+    ReviewForm,
+    ReviewList,
   },
   props: {
     premium: {
@@ -91,6 +97,7 @@ export default {
         { id:2235, color:'blue', image:'./assets/images/socks_blue.jpg', quantity:10, onSale:false },
       ],
       sizes: ['small', 'medium', 'large'],
+      reviews: [],
     };
   },
   methods: {
@@ -102,6 +109,9 @@ export default {
     },
     updateVariant(index) {
       this.selectedVariant = index;
+    },
+    addReview(review) {
+      this.reviews.push(review);
     },
   },
 }
